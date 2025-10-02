@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap');
+@import '@/assets/prime-overrides.css';
+
+:root {
+  --primaryColor50: rgba(239, 225, 208, 0.58);
+  --primaryColor100: #a3927f;
+  --primaryColor200: #dcc4a9;
+  --primaryColor300: #cdaa84;
+  --primaryColor400: #d6ae7b;
+  --primaryColor500: #AC8362;
+  --primaryColor600: #9d775a;
+  --primaryColor700: #7b5d46;
+  --primaryColor800: #5f4936;
+  --primaryColor900: #493829;
+
+  /* Color de texto */
+  --text-primary: #604527;
+  --text-secondary: #757575;
+  --text-color: #333333;
+  --text-disabled: #9e9e9e;
+
+  /* Color de fondo */
+  --background-color: #ffffff;
+  --background-color-light: #f5f5f5;
+  --surface-color: #ffffff;
+
+
+  font-family: 'Nunito Sans', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light only;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --p-drawer-background: var(--background-color) !important;
+  --p-drawer-content-background: var(--background-color) !important;
+  --p-sidebar-background: var(--background-color) !important;
+  --p-button-text-primary-active-background: rgba(172, 131, 98, 0.2) !important;
+
+}
+
+* {
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--background-color);
+}
+
+.p-drawer {
+  background-color: var(--background-color) !important;
+}
+
+.p-drawer-content {
+  background-color: var(--background-color) !important;
+}
+
+.p-sidebar {
+  background-color: var(--background-color) !important;
+}
+
+#app {
+  background-color: var(--background-color);
+  color: var(--text-primary);
+}

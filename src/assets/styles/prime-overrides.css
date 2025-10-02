@@ -1,0 +1,35 @@
+/* Sobrescribir estilos de PrimeVue para mantener nuestra paleta de colores */
+.p-button.p-button-primary {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.p-button.p-button-primary:hover {
+  background-color: #9a754f;
+  border-color: #9a754f;
+}
+
+.p-button.p-button-danger {
+  background-color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+.p-button.p-button-danger:hover {
+  background-color: #7e1f12;
+  border-color: #7e1f12;
+}
+
+.p-toast .p-toast-message.p-toast-message-success {
+  background-color: #DFF2D8;
+  border-left: 6px solid #4CAF50;
+}
+
+.p-toast .p-toast-message.p-toast-message-error {
+  background-color: #FFEBEE;
+  border-left: 6px solid var(--color-danger);
+}
+
+.p-card {
+  background-color: var(--color-card);
+  border-radius: var(--border-radius-sm);
+} 

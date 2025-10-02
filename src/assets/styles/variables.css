@@ -1,0 +1,20 @@
+:root {
+  /* Paleta de colores Bibflip */
+  --color-background: #f8f8f8;
+  --color-header: #5D3C18;
+  --color-primary: #B08968;
+  --color-danger: #9C2B1B;
+  --color-card: #FAF5F0;
+  --color-text-primary: #000000;
+  --color-text-secondary: #333333;
+  --color-accent: #9C2B1B;
+  
+  /* Sombras */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 4px 15px rgba(0, 0, 0, 0.2);
+  
+  /* Bordes */
+  --border-radius-sm: 5px;
+  --border-radius-md: 8px;
+} 
