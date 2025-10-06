@@ -79,7 +79,7 @@ export default {
                   headquarterId: hqId,
                   cubicleNumber: cubicle?.cubicleNumber || 'N/A',
                   capacity: cubicle?.seats || 4,
-                  zone: 'Sala principal'//DESPUES CAMBAIR ESTO
+                  zone: 'A'//DESPUES CAMBAIR ESTO
                 };
               });
         } else {
