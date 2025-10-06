@@ -10,9 +10,9 @@ export class CubicleEntity {
 
   getZoneDisplayName() {
     const zoneTranslations = {
-      'MAIN_HALL': 'Sala principal',
-      'WINDOW': 'Ventana',
-      'TERRACE': 'Terraza'
+      'MAIN_HALL': 'A',
+      'WINDOW': 'C',
+      'TERRACE': 'B'
     };
     return zoneTranslations[this.zone] || this.zone;
   }

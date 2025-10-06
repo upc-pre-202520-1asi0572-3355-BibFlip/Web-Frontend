@@ -15,14 +15,14 @@ const props = defineProps({
 // Datos del formulario
 const cubicleNumber = ref('');
 const seats = ref('');
-const zone = ref('Sala principal');
+const zone = ref('A');
 const headquarterId = ref(props.predefinedHeadquarterId);
 
 // Zonas disponibles
 const zones = [
-  { name: 'Sala principal', value: 'Sala principal' },
-  { name: 'Terraza', value: 'Terraza' },
-  { name: 'Ventana', value: 'Ventana' }
+  { name: 'Pabellon A', value: 'A' },
+  { name: 'Pabellon B', value: 'B' },
+  { name: 'Pabellon C', value: 'C'}
 ];
 
 
@@ -70,7 +70,7 @@ const handleSubmit = () => {
 const resetForm = () => {
   cubicleNumber.value = '';
   seats.value = '';
-  zone.value = 'Sala principal';
+  zone.value = 'A';
   errors.value = {};
 };
 
