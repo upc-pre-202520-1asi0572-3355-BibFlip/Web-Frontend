@@ -10,12 +10,14 @@ const authenticationStore = useAuthenticationStore();
 const username = ref('');
 const password = ref('');
 const confirmPassword = ref('');
+const email = ref('');
 
 // Objetos de validación para cada campo
 const validation = ref({
   username: { valid: true, message: '', touched: false },
   password: { valid: true, message: '', touched: false },
-  confirmPassword: { valid: true, message: '', touched: false }
+  confirmPassword: { valid: true, message: '', touched: false },
+  email: { valid: true, message: '', touched: false }
 });
 
 // Validación de complejidad de contraseña
@@ -25,8 +27,14 @@ const validatePasswordComplexity = (password) => {
   const hasNumbers = /\d/.test(password);
   const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(password);
   const hasMinLength = password.length >= 8;
-  
+
   return hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChar && hasMinLength;
+};
+
+// Validación de email UPC
+const validateEmailUPC = (email) => {
+  const emailPattern = /^u20\d{7}@upc\.edu\.pe$/i;
+  return emailPattern.test(email);
 };
 
 // Mostrar requisitos de contraseña
@@ -40,13 +48,14 @@ const validateField = (field, value) => {
   if (!value || !value.trim()) {
     validation.value[field].valid = false;
     validation.value[field].message = `El campo ${
-      field === 'username' ? 'usuario' : 
-      field === 'password' ? 'contraseña' : 
-      'confirmar contraseña'
+        field === 'username' ? 'usuario' :
+            field === 'password' ? 'contraseña' :
+                field === 'email' ? 'correo' :
+                    'confirmar contraseña'
     } es requerido`;
     return false;
   }
-  
+
   // Validaciones específicas por campo
   if (field === 'password') {
     // Validar complejidad si hay contenido
@@ -62,8 +71,15 @@ const validateField = (field, value) => {
       validation.value[field].message = 'Las contraseñas no coinciden';
       return false;
     }
+  } else if (field === 'email') {
+    // Validar formato de email UPC
+    if (!validateEmailUPC(value)) {
+      validation.value[field].valid = false;
+      validation.value[field].message = 'El correo debe tener el formato u20xxxxxxx@upc.edu.pe';
+      return false;
+    }
   }
-  
+
   // Si pasa todas las validaciones
   validation.value[field].valid = true;
   validation.value[field].message = '';
@@ -75,15 +91,18 @@ const validateForm = () => {
   const usernameValid = validateField('username', username.value);
   const passwordValid = validateField('password', password.value);
   const confirmPasswordValid = validateField('confirmPassword', confirmPassword.value);
-  
-  return usernameValid && passwordValid && confirmPasswordValid;
+  const emailValid = validateField('email', email.value);
+
+  return usernameValid && passwordValid && confirmPasswordValid && emailValid;
 };
 
 // Marcar campo como tocado y validar cuando pierde el foco
 const onFieldBlur = (field) => {
   validation.value[field].touched = true;
-  validateField(field, field === 'username' ? username.value : 
-                      field === 'password' ? password.value : confirmPassword.value);
+  validateField(field, field === 'username' ? username.value :
+      field === 'password' ? password.value :
+          field === 'email' ? email.value :
+              confirmPassword.value);
 };
 
 // Observadores para validar en tiempo real
@@ -109,16 +128,23 @@ watch(confirmPassword, (newValue) => {
   }
 });
 
+watch(email, (newValue) => {
+  if (validation.value.email.touched) {
+    validateField('email', newValue);
+  }
+});
+
 const onSignUp = async () => {
   // Marcar todos los campos como tocados para mostrar todos los errores
   validation.value.username.touched = true;
   validation.value.password.touched = true;
   validation.value.confirmPassword.touched = true;
-  
+  validation.value.email.touched = true;
+
   if (!validateForm()) return;
 
   try {
-    const signUpRequest = new SignUpRequest(username.value, password.value);
+    const signUpRequest = new SignUpRequest(username.value, password.value, email.value);
     await authenticationStore.signUp(signUpRequest, router);
   } catch (error) {
     validation.value.username.valid = false;
@@ -156,6 +182,21 @@ const onSignUp = async () => {
           />
           <small v-if="!validation.username.valid && validation.username.touched" class="error-message">
             {{ validation.username.message }}
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Correo UPC</label>
+          <pv-input-text
+              id="email"
+              v-model="email"
+              type="text"
+              placeholder="u20xxxxxxx@upc.edu.pe"
+              :class="{'p-invalid': !validation.email.valid && validation.email.touched}"
+              @blur="onFieldBlur('email')"
+          />
+          <small v-if="!validation.email.valid && validation.email.touched" class="error-message">
+            {{ validation.email.message }}
           </small>
         </div>
 
@@ -219,6 +260,7 @@ const onSignUp = async () => {
   align-items: center;
   min-height: 100vh;
   background-color: var(--background-color);
+  padding: 20px;
 }
 
 .sign-up-form {

@@ -7,12 +7,12 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const authenticationStore = useAuthenticationStore();
 
-const username = ref('');
+const email = ref('');
 const password = ref('');
 
 // Objetos de validación para cada campo
 const validation = ref({
-  username: { valid: true, message: '', touched: false },
+  email: { valid: true, message: '', touched: false },
   password: { valid: true, message: '', touched: false }
 });
 
@@ -20,7 +20,7 @@ const validation = ref({
 const validateField = (field, value) => {
   if (!value || !value.trim()) {
     validation.value[field].valid = false;
-    validation.value[field].message = `El campo ${field === 'username' ? 'usuario' : 'contraseña'} es requerido`;
+    validation.value[field].message = `El campo ${field === 'email' ? 'correo' : 'contraseña'} es requerido`;
     return false;
   } else {
     validation.value[field].valid = true;
@@ -31,21 +31,21 @@ const validateField = (field, value) => {
 
 // Validar formulario completo
 const validateForm = () => {
-  const usernameValid = validateField('username', username.value);
+  const emailValid = validateField('email', email.value);
   const passwordValid = validateField('password', password.value);
-  return usernameValid && passwordValid;
+  return emailValid && passwordValid;
 };
 
 // Marcar campo como tocado y validar cuando pierde el foco
 const onFieldBlur = (field) => {
   validation.value[field].touched = true;
-  validateField(field, field === 'username' ? username.value : password.value);
+  validateField(field, field === 'email' ? email.value : password.value);
 };
 
 // Observadores para validar en tiempo real cuando cambia el valor
-watch(username, (newValue) => {
-  if (validation.value.username.touched) {
-    validateField('username', newValue);
+watch(email, (newValue) => {
+  if (validation.value.email.touched) {
+    validateField('email', newValue);
   }
 });
 
@@ -57,17 +57,17 @@ watch(password, (newValue) => {
 
 const onSignIn = async () => {
   // Marcar todos los campos como tocados para mostrar todos los errores
-  validation.value.username.touched = true;
+  validation.value.email.touched = true;
   validation.value.password.touched = true;
-  
+
   if (!validateForm()) return;
 
   try {
-    const signInRequest = new SignInRequest(username.value, password.value);
+    const signInRequest = new SignInRequest(email.value, password.value);
     await authenticationStore.signIn(signInRequest, router);
   } catch (error) {
-    validation.value.username.valid = false;
-    validation.value.username.message = 'Credenciales incorrectas';
+    validation.value.email.valid = false;
+    validation.value.email.message = 'Credenciales incorrectas';
     validation.value.password.valid = false;
   }
 };
@@ -76,7 +76,7 @@ const onSignIn = async () => {
 <template>
   <div class="sign-in-container">
     <div class="sign-in-form">
-      <!-- Logo y título, sin cambios -->
+      <!-- Logo y título -->
       <div class="logo">
         <img src="@/assets/images/icon.svg" alt="Logo Bibflip">
       </div>
@@ -90,35 +90,35 @@ const onSignIn = async () => {
       </div>
 
       <form @submit.prevent="onSignIn">
-      <div class="form-group">
-        <label for="username">Usuario</label>
-        <pv-input-text
-            id="username"
-            v-model="username"
-            type="text"
-            placeholder="Coloca tu nombre de usuario"
-            :class="{'p-invalid': !validation.username.valid && validation.username.touched}"
-            @blur="onFieldBlur('username')"
-        />
-        <small v-if="!validation.username.valid && validation.username.touched" class="error-message">
-          {{ validation.username.message }}
-        </small>
-      </div>
+        <div class="form-group">
+          <label for="email">Correo</label>
+          <pv-input-text
+              id="email"
+              v-model="email"
+              type="text"
+              placeholder="Coloca tu correo"
+              :class="{'p-invalid': !validation.email.valid && validation.email.touched}"
+              @blur="onFieldBlur('email')"
+          />
+          <small v-if="!validation.email.valid && validation.email.touched" class="error-message">
+            {{ validation.email.message }}
+          </small>
+        </div>
 
-      <div class="form-group">
-        <label for="password">Contraseña</label>
-        <pv-input-text
-            id="password"
-            v-model="password"
-            type="password"
-            placeholder="Coloca tu contraseña"
-            :class="{'p-invalid': !validation.password.valid && validation.password.touched}"
-            @blur="onFieldBlur('password')"
-        />
-        <small v-if="!validation.password.valid && validation.password.touched" class="error-message">
-          {{ validation.password.message }}
-        </small>
-      </div>
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <pv-input-text
+              id="password"
+              v-model="password"
+              type="password"
+              placeholder="Coloca tu contraseña"
+              :class="{'p-invalid': !validation.password.valid && validation.password.touched}"
+              @blur="onFieldBlur('password')"
+          />
+          <small v-if="!validation.password.valid && validation.password.touched" class="error-message">
+            {{ validation.password.message }}
+          </small>
+        </div>
 
         <div class="form-group button-container">
           <pv-button type="submit" class="signin-button">Iniciar sesión</pv-button>
@@ -139,6 +139,7 @@ const onSignIn = async () => {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  padding: 20px;
   background-color: var(--background-color);
 }
 
@@ -199,8 +200,8 @@ const onSignIn = async () => {
 
 .sign-in-container .sign-in-form .form-group .p-inputtext:focus {
   outline: none;
-  border-color: var(--primaryColor600) ; /* Color más oscuro del borde */
-  box-shadow: 0 0 0 2px rgba(172, 131, 98, 0.3) ; /* Efecto de brillo alrededor */
+  border-color: var(--primaryColor600);
+  box-shadow: 0 0 0 2px rgba(172, 131, 98, 0.3);
 }
 
 .error-message {
@@ -232,7 +233,6 @@ const onSignIn = async () => {
 
 .sign-in-container .button-container .signin-button:hover {
   background-color: var(--primaryColor600);
-  border-color: var(--primaryColor200);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
@@ -243,6 +243,11 @@ const onSignIn = async () => {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.sign-in-container .button-container .signin-button:focus {
+  outline: none;
+  background-color: var(--primaryColor600);
+  box-shadow: 0 0 0 2px rgba(172, 131, 98, 0.3);
+}
 
 .register-link {
   text-align: center;

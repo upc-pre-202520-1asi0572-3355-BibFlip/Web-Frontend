@@ -4,9 +4,7 @@ export const RoleEnum = Object.freeze({
     USER: 'ROLE_USER'
 });
 
-// Funciones de ayuda para trabajar con roles
 export const hasRole = (userRoles, requiredRole) => {
-    // Si se pasa la clave del enum, convertirla a su valor
     const roleValue = RoleEnum[requiredRole] || requiredRole;
     return userRoles.includes(roleValue);
 };

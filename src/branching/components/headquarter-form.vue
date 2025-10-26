@@ -195,11 +195,11 @@ export default {
       }
     },
     validatePostalCode() {
-      const numberRegex = /^\d{4}$/;
+      const numberRegex = /^\d{5}$/;
       if (!this.form.postalCode) {
         this.errors.postalCode = 'El código postal es requerido';
       } else if (!numberRegex.test(this.form.postalCode)) {
-        this.errors.postalCode = 'Debe contener exactamente 4 números';
+        this.errors.postalCode = 'Debe contener exactamente 5 números';
       } else {
         delete this.errors.postalCode;
       }
@@ -353,8 +353,8 @@ export default {
                 id="postalCode"
                 v-model="form.postalCode"
                 type="text"
-                placeholder="Ej: 1234"
-                maxlength="4"
+                placeholder="Ej: 12345"
+                maxlength="5"
                 :class="{ 'error': errors.postalCode }"
                 @input="validatePostalCode"
             />
@@ -421,7 +421,7 @@ export default {
           </div>
         </div>
         <div class="form-group">
-          <label for="intervalMinutes">Intervalo de Citas (minutos) *</label>
+          <label for="intervalMinutes">Intervalo de Reservas (minutos) *</label>
           <input
               id="intervalMinutes"
               v-model="form.intervalMinutes"
@@ -501,6 +501,7 @@ export default {
   flex: 1;
   display: flex;
   flex-direction: column;
+  margin-bottom: 1rem;
 }
 
 .form-group label {

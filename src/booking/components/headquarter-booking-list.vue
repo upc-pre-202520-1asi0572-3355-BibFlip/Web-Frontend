@@ -74,12 +74,12 @@ export default {
 
                 return {
                   ...booking,
-                  clientName: b.clientName || 'Cliente',
-                  cubicleCapacity: cubicle?.seats ?? 'Desconocida',
+                  clientName: b.clientName || 'Estudiante',
+                  cubicleCapacity: cubicle?.seats ?? '-',
                   headquarterId: hqId,
                   cubicleNumber: cubicle?.cubicleNumber || 'N/A',
                   capacity: cubicle?.seats || 4,
-                  zone: 'A'//DESPUES CAMBAIR ESTO
+                  zone: 'A'// UPDATE LATER
                 };
               });
         } else {

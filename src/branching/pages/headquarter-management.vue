@@ -171,11 +171,20 @@ export default {
 
     const newSupervisor = ref({
       username: '',
+      email: '',
       password: '',
       confirmPassword: ''
     });
+
     const errors = ref({});
+
+    const validateEmail = (email) => {
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailPattern.test(email);
+    };
+
     const registrationSuccess = ref(false);
+
     const onHeadquarterCreated = (newHeadquarter) => {
       headquarters.value.push(newHeadquarter);
       showNotification('Sede creada correctamente', 'success');
@@ -202,6 +211,12 @@ export default {
         errors.value.username = 'El nombre de usuario es requerido';
       }
 
+      if (!newSupervisor.value.email?.trim()) {
+        errors.value.email = 'El correo es requerido';
+      } else if (!validateEmail(newSupervisor.value.email)) {
+        errors.value.email = 'Ingrese un correo electrónico válido';
+      }
+
       if (!newSupervisor.value.password?.trim()) {
         errors.value.password = 'La contraseña es requerida';
       } else if (newSupervisor.value.password.length < 6) {
@@ -221,6 +236,7 @@ export default {
       try {
         const payload = {
           username: newSupervisor.value.username,
+          email: newSupervisor.value.email,
           password: newSupervisor.value.password,
           roles: ["ROLE_SUPERVISOR"]
         };
@@ -228,7 +244,7 @@ export default {
         const response = await apiService.registerUser(payload);
         if (response && response.data) {
           registrationSuccess.value = true;
-          newSupervisor.value = { username: '', password: '', confirmPassword: '' };
+          newSupervisor.value = { username: '', email: '', password: '', confirmPassword: '' };
           await fetchAllSupervisors(); // Refresh the list of supervisors
           showNotification('Supervisor registrado correctamente', 'success');
           setTimeout(() => {
@@ -479,6 +495,18 @@ export default {
                       placeholder="Ingrese nombre de usuario"
                   />
                   <span v-if="errors.username" class="error-message">{{ errors.username }}</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="email">Correo Electrónico</label>
+                  <input
+                      id="email"
+                      type="text"
+                      v-model="newSupervisor.email"
+                      :class="['form-control', {'error': errors.email}]"
+                      placeholder="example@gmail.com"
+                  />
+                  <span v-if="errors.email" class="error-message">{{ errors.email }}</span>
                 </div>
 
                 <div class="form-group">
