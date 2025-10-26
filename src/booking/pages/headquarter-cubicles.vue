@@ -19,7 +19,7 @@ const noCubiclesFound = ref(false);
 // Filtros
 const capacityFilter = ref('all');
 const zoneFilter = ref('all');
-const availableZones = ref(['terraza', 'ventana', 'interior']);
+const availableZones = ref(['B', 'C', 'interior']);
 const availableCapacities = ref([1, 2, 4, 6, 8]);
 
 // Formulario de reserva
