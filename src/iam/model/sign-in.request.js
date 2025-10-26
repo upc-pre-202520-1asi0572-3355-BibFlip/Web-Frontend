@@ -6,11 +6,11 @@
 export class SignInRequest {
     /**
      * Constructor
-     * @param {string} username - The username
+     * @param {string} email - The email
      * @param {string} password - The password
      */
-    constructor(username, password) {
-        this.username = username;
+    constructor(email, password) {
+        this.email = email;
         this.password = password;
     }
 }

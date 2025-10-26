@@ -27,7 +27,7 @@ export default {
               booking.cubicleId === props.cubicle.id
           );
 
-          // Para cada reserva, obtener el nombre del cliente
+          // Para cada reserva, obtener el nombre del estudiante
           for (const booking of bookings.value) {
             if (booking.clientId || booking.userId) {
               const userId = booking.clientId || booking.userId;
@@ -36,10 +36,10 @@ export default {
               if (userResponse?.data) {
                 booking.clientName = userResponse.data.username;
               } else {
-                booking.clientName = 'Cliente';
+                booking.clientName = 'Estudiante';
               }
             } else {
-              booking.clientName = 'Cliente';
+              booking.clientName = 'Estudiante';
             }
           }
         }
@@ -86,7 +86,7 @@ export default {
         <div v-for="booking in bookings" :key="booking.id" class="booking-item">
           <div class="booking-info">
             <div class="info-row">
-              <span class="info-label">Cliente:</span>
+              <span class="info-label">Estudiante:</span>
               <span class="info-value">{{ booking.clientName }}</span>
             </div>
 

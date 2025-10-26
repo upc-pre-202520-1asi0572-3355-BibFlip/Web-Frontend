@@ -13,7 +13,7 @@
         <button
             @click="activeFilter = 'person'"
             :class="['filter-btn', activeFilter === 'person' ? 'active' : '']">
-          <i class="pi pi-user"></i> Por Cliente
+          <i class="pi pi-user"></i> Por Estudiante
         </button>
         <button
             @click="activeFilter = 'cubicle'"
@@ -38,7 +38,7 @@
           <div class="empty-icon">
             <i class="pi pi-users"></i>
           </div>
-          <h3 class="empty-title">No hay reservas de clientes</h3>
+          <h3 class="empty-title">No hay reservas de estudiantes</h3>
           <p class="empty-description">No se encontraron reservas activas en este momento.</p>
         </div>
 
@@ -74,11 +74,11 @@
 </template>
 
 <script>
-import { ref, onMounted, computed } from 'vue';
-import { BookingService } from '../services/booking.service.js';
+import {computed, onMounted, ref} from 'vue';
+import {BookingService} from '../services/booking.service.js';
 import BookingCardPerson from '../components/booking-card-person.vue';
 import BookingCardCubicle from '../components/booking-card-cubicle.vue';
-import { useAuthenticationStore } from '@/iam/services/authentication.store.js';
+import {useAuthenticationStore} from '@/iam/services/authentication.store.js';
 
 export default {
   name: "SupervisorBooking",
@@ -132,14 +132,13 @@ export default {
                 if (booking.headquarterId !== hqId) return false;
 
                 // Verificar que la reserva tiene un cubiculo asignada que existe en esta sede
-                const cubicleExists = cubicles.value.some(t => t.id === booking.cubicleId);
-                return cubicleExists;
+                return cubicles.value.some(t => t.id === booking.cubicleId);
               })
               .map(booking => {
                 const cubicle = cubicles.value.find(t => t.id === booking.cubicleId);
                 return {
                   ...booking,
-                  clientName: booking.clientName || 'Cliente',
+                  clientName: booking.clientName || 'Estudiante',
                   cubicleNumber: cubicle?.cubicleNumber || 'N/A',
                   cubicleCapacity: cubicle?.seats || 0,
                   zone: cubicle?.zone || 'Sin asignar'

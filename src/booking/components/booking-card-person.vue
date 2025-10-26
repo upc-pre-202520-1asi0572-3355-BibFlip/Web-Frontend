@@ -11,7 +11,7 @@ export default {
     }
   },
   setup(props) {
-    const clientName = ref(props.booking.clientName || 'Cliente');
+    const clientName = ref(props.booking.clientName || 'Estudiante');
     const bookingService = new BookingService();
 
     onMounted(async () => {

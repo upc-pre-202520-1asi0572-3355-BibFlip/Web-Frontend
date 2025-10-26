@@ -10,11 +10,13 @@ export class SignInResponse {
      * @param username The username
      * @param token The generated token
      * @param roles The roles assigned to the user
+     * @param email The user email
      */
-    constructor(id, username, token, roles = []) {
+    constructor(id, username, token, roles = [], email) {
         this.id = id;
         this.username = username;
         this.token = token;
         this.roles = roles;
+        this.email = email
     }
 }
