@@ -8,9 +8,11 @@ export class SignUpRequest {
      * Constructor.
      * @param username The username.
      * @param password The password.
+     * @param email The email.
      */
-    constructor(username, password) {
+    constructor(username, password, email) {
         this.username = username;
         this.password = password;
+        this.email = email;
     }
 }

@@ -121,7 +121,7 @@ onMounted(async () => {
     loading.value = true;
     const clientId = authStore.currentUserId;
 
-    // Verificar si hay ID de cliente
+    // Verificar si hay ID de estudiante
     if (!clientId) {
       error.value = "No se pudo identificar al usuario";
       loading.value = false;
