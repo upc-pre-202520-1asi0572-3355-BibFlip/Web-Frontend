@@ -10,13 +10,11 @@ const authenticationStore = useAuthenticationStore();
 const email = ref('');
 const password = ref('');
 
-// Objetos de validación para cada campo
 const validation = ref({
   email: { valid: true, message: '', touched: false },
   password: { valid: true, message: '', touched: false }
 });
 
-// Validación por campo
 const validateField = (field, value) => {
   if (!value || !value.trim()) {
     validation.value[field].valid = false;
@@ -29,20 +27,17 @@ const validateField = (field, value) => {
   }
 };
 
-// Validar formulario completo
 const validateForm = () => {
   const emailValid = validateField('email', email.value);
   const passwordValid = validateField('password', password.value);
   return emailValid && passwordValid;
 };
 
-// Marcar campo como tocado y validar cuando pierde el foco
 const onFieldBlur = (field) => {
   validation.value[field].touched = true;
   validateField(field, field === 'email' ? email.value : password.value);
 };
 
-// Observadores para validar en tiempo real cuando cambia el valor
 watch(email, (newValue) => {
   if (validation.value.email.touched) {
     validateField('email', newValue);
@@ -56,7 +51,6 @@ watch(password, (newValue) => {
 });
 
 const onSignIn = async () => {
-  // Marcar todos los campos como tocados para mostrar todos los errores
   validation.value.email.touched = true;
   validation.value.password.touched = true;
 
@@ -76,7 +70,6 @@ const onSignIn = async () => {
 <template>
   <div class="sign-in-container">
     <div class="sign-in-form">
-      <!-- Logo y título -->
       <div class="logo">
         <img src="@/assets/images/icon.svg" alt="Logo Bibflip">
       </div>
@@ -128,6 +121,14 @@ const onSignIn = async () => {
           ¿No tienes una cuenta todavía?
           <router-link to="/sign-up">Crear cuenta</router-link>
         </div>
+
+        <!-- -->
+        <div class="password-recovery-link">
+          ¿Olvidaste tu contraseña?
+          <router-link :to="{ name: 'password-reset-request', query: { email: email } }">
+            Restablece tu contraseña
+          </router-link>
+        </div>
       </form>
     </div>
   </div>
@@ -150,6 +151,7 @@ const onSignIn = async () => {
   text-align: center;
   background: var(--surface-color);
   border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
@@ -181,7 +183,7 @@ const onSignIn = async () => {
 
 .form-group label {
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
   font-weight: 500;
   color: var(--text-primary);
   font-size: 14px;
@@ -198,7 +200,7 @@ const onSignIn = async () => {
   transition: all 0.3s ease;
 }
 
-.sign-in-container .sign-in-form .form-group .p-inputtext:focus {
+.sign-in-container .sign-in-form .form-group :focus {
   outline: none;
   border-color: var(--primaryColor600);
   box-shadow: 0 0 0 2px rgba(172, 131, 98, 0.3);
@@ -237,7 +239,7 @@ const onSignIn = async () => {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.sign-in-container .sign-in-form .button-container .p-button.signin-button:active {
+.sign-in-container .sign-in-form .button-container .signin-button:active {
   transform: translateY(0);
   background-color: var(--primaryColor700);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -264,6 +266,24 @@ const onSignIn = async () => {
 }
 
 .register-link a:hover {
+  text-decoration: underline;
+}
+
+.password-recovery-link {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.password-recovery-link a {
+  color: var(--primaryColor500);
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+.password-recovery-link a:hover {
   text-decoration: underline;
 }
 </style>
