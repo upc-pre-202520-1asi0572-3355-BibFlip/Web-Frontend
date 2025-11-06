@@ -4,6 +4,8 @@ import SignUpComponent from "../iam/pages/sign-up.component.vue";
 import { authenticationGuard } from "../iam/services/authentication.guard.js";
 import { authorizationGuard } from "../iam/services/authentication.authorization.js";
 import { RoleEnum } from "../iam/model/role.enum";
+import PasswordResetRequestComponent from "../iam/pages/password-reset-request.component.vue";
+import PasswordResetConfirmComponent from "../iam/pages/password-reset-confirm.component.vue";
 
 export function createAppRouter() {
     const router = createRouter({
@@ -18,10 +20,7 @@ export function createAppRouter() {
                     requiresAuth: true
                 }
             },
-            // Rutas de gestión de menús
-            {
-                // ...
-            },
+            // App Routes
             {
                 path: '/headquarters',
                 name: 'reservation',
@@ -49,6 +48,7 @@ export function createAppRouter() {
                     requiresAuth: true,
                 }
             },
+            // IAM Routes
             { 
                 path: '/sign-in', 
                 name: 'sign-in', 
@@ -61,6 +61,24 @@ export function createAppRouter() {
                 component: SignUpComponent, 
                 meta: { title: 'Sign Up' }
             },
+            {
+                path: '/',
+                redirect: '/sign-in'
+            },
+            // Password Reset Routes
+            {
+                path: '/password-reset/request',
+                name: 'password-reset-request',
+                component: PasswordResetRequestComponent,
+                meta: { title: 'Recuperar Contraseña' }
+            },
+            {
+                path: '/password-reset/confirm',
+                name: 'password-reset-confirm',
+                component: PasswordResetConfirmComponent,
+                meta: { title: 'Restablecer Contraseña' }
+            },
+            // Other Routes
             { 
                 path: '/access-denied', 
                 name: 'access-denied',
@@ -76,10 +94,6 @@ export function createAppRouter() {
                     requiresAuth: true,
                     roles: [RoleEnum.ADMIN, RoleEnum.SUPERVISOR]
                 }
-            },
-            { 
-                path: '/', 
-                redirect: '/sign-in' 
             },
             {
                 path: '/supervisor-booking',
@@ -110,20 +124,20 @@ export function createAppRouter() {
         ]
     });
 
-    // Configurar los guards de forma sincrónica
+    // Configures global navigation guards
     router.beforeEach((to, from, next) => {
-        // Actualizar el título
+        // Updates document title
         let baseTitle = 'Bibflip';
         document.title = `${baseTitle} | ${to.meta.title || 'App'}`;
         
-        // Primero verificar autenticación
+        // Verifies authentication first
         authenticationGuard(to, from, (guardNext) => {
             if (guardNext && typeof guardNext === 'object') {
-                // Si el guard de autenticación redirige, respetarlo
+                // If authentication guard redirected, skip authorization
                 return next(guardNext);
             }
             
-            // Después verificar autorización (roles)
+            // Then verifies authorization
             authorizationGuard(to, from, next);
         });
     });
