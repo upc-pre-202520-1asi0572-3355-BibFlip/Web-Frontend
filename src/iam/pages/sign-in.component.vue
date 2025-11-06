@@ -7,18 +7,18 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const authenticationStore = useAuthenticationStore();
 
-const email = ref('');
+const username = ref('');
 const password = ref('');
 
 const validation = ref({
-  email: { valid: true, message: '', touched: false },
+  username: { valid: true, message: '', touched: false },
   password: { valid: true, message: '', touched: false }
 });
 
 const validateField = (field, value) => {
   if (!value || !value.trim()) {
     validation.value[field].valid = false;
-    validation.value[field].message = `El campo ${field === 'email' ? 'correo' : 'contraseña'} es requerido`;
+    validation.value[field].message = `El campo ${field === 'username' ? 'nombre' : 'contraseña'} es requerido`;
     return false;
   } else {
     validation.value[field].valid = true;
@@ -28,19 +28,19 @@ const validateField = (field, value) => {
 };
 
 const validateForm = () => {
-  const emailValid = validateField('email', email.value);
+  const usernameValid = validateField('username', username.value);
   const passwordValid = validateField('password', password.value);
-  return emailValid && passwordValid;
+  return usernameValid && passwordValid;
 };
 
 const onFieldBlur = (field) => {
   validation.value[field].touched = true;
-  validateField(field, field === 'email' ? email.value : password.value);
+  validateField(field, field === 'username' ? username.value : password.value);
 };
 
-watch(email, (newValue) => {
-  if (validation.value.email.touched) {
-    validateField('email', newValue);
+watch(username, (newValue) => {
+  if (validation.value.username.touched) {
+    validateField('username', newValue);
   }
 });
 
@@ -51,17 +51,17 @@ watch(password, (newValue) => {
 });
 
 const onSignIn = async () => {
-  validation.value.email.touched = true;
+  validation.value.username.touched = true;
   validation.value.password.touched = true;
 
   if (!validateForm()) return;
 
   try {
-    const signInRequest = new SignInRequest(email.value, password.value);
+    const signInRequest = new SignInRequest(username.value, password.value);
     await authenticationStore.signIn(signInRequest, router);
   } catch (error) {
-    validation.value.email.valid = false;
-    validation.value.email.message = 'Credenciales incorrectas';
+    validation.value.username.valid = false;
+    validation.value.username.message = 'Credenciales incorrectas';
     validation.value.password.valid = false;
   }
 };
@@ -84,17 +84,17 @@ const onSignIn = async () => {
 
       <form @submit.prevent="onSignIn">
         <div class="form-group">
-          <label for="email">Correo</label>
+          <label for="username">Nombre</label>
           <pv-input-text
-              id="email"
-              v-model="email"
+              id="username"
+              v-model="username"
               type="text"
-              placeholder="Coloca tu correo"
-              :class="{'p-invalid': !validation.email.valid && validation.email.touched}"
-              @blur="onFieldBlur('email')"
+              placeholder="Coloca tu nombre de usuario"
+              :class="{'p-invalid': !validation.username.valid && validation.username.touched}"
+              @blur="onFieldBlur('username')"
           />
-          <small v-if="!validation.email.valid && validation.email.touched" class="error-message">
-            {{ validation.email.message }}
+          <small v-if="!validation.username.valid && validation.username.touched" class="error-message">
+            {{ validation.username.message }}
           </small>
         </div>
 
@@ -122,13 +122,14 @@ const onSignIn = async () => {
           <router-link to="/sign-up">Crear cuenta</router-link>
         </div>
 
-        <!-- -->
+        <!-- Falta adaptar la funcionalidad de recuperación de contraseña
         <div class="password-recovery-link">
           ¿Olvidaste tu contraseña?
           <router-link :to="{ name: 'password-reset-request', query: { email: email } }">
             Restablece tu contraseña
           </router-link>
         </div>
+        --->
       </form>
     </div>
   </div>
